@@ -1,145 +1,119 @@
-# 🎓 CourseSniper - UCSD WebReg Monitor
+# CourseSniper - UCSD WebReg Monitor
 
-Automated course enrollment monitoring system for UCSD. Get instant notifications when seats open up in full classes.
+Automatically monitors UCSD WebReg and emails you when seats open up in full classes.
 
-## 🚀 Features
+## What it does
 
-- **Real-time monitoring** - Checks WebReg every 30min-4hr (configurable)
-- **Email notifications** - Instant alerts when seats become available
-- **Web dashboard** - Modern React interface to manage courses
-- **Session persistence** - Stays logged in with cookie management
-- **Multi-course tracking** - Monitor unlimited courses simultaneously
-- **Smart notifications** - Sound alerts once/hour, emails always
+Checks WebReg every 30 minutes to 4 hours (you pick) and sends you an email the second a seat opens up. Way better than refreshing the page 500 times a day.
 
-## 🛠️ Tech Stack
+## Features
 
-- **Backend:** Python, Selenium WebDriver, Flask REST API, SQLite
-- **Frontend:** React, HTML5, CSS3
-- **Automation:** Headless Chrome, dynamic DOM parsing
-- **Notifications:** Gmail SMTP, system sound alerts
+- Monitors as many courses as you want
+- Email notifications when seats are available
+- Web interface to add/remove courses
+- Stays logged into WebReg so you don't have to keep signing in
+- Sound alert on your computer when it finds a seat
+- Configurable check intervals
 
-## 📦 Installation
+## Tech used
 
-### Prerequisites
-- Python 3.11+
-- Chrome browser
-- Gmail account (for notifications)
+Python, Selenium, Flask, SQLite. Frontend is just HTML/CSS/JS (no React or anything fancy).
 
-### Setup
+## Installation
 
-1. **Clone the repository:**
+You need Python 3.11 or newer and Chrome.
+
+Clone this repo:
 ```bash
-git clone https://github.com/yourusername/course-sniper.git
-cd course-sniper
+git clone https://github.com/aryankumar009/Course-Sniper.git
+cd Course-Sniper
 ```
 
-2. **Install dependencies:**
+Install dependencies:
 ```bash
 cd backend
 pip3 install -r requirements_web.txt
 ```
 
-3. **Configure email (optional):**
+Optional - set up email notifications:
 ```bash
 cp email_config.example.json email_config.json
-# Edit email_config.json with your Gmail and app password
 ```
+Then edit email_config.json with your Gmail and app password. Get an app password here: https://myaccount.google.com/apppasswords
 
-Get Gmail app password: https://myaccount.google.com/apppasswords
+## How to run
 
-## 🎯 Usage
+Open two terminals.
 
-### Start the system:
-
-**Terminal 1 - API Server:**
+Terminal 1:
 ```bash
 cd backend
 python3 api.py
 ```
 
-**Terminal 2 - Frontend:**
+Terminal 2:
 ```bash
 cd frontend
 python3 -m http.server 8000
 ```
 
-### Use the web interface:
+Then open http://localhost:8000/index.html in your browser.
 
-1. Open http://localhost:8000/index.html
-2. Add courses (e.g., CSE 100, MATH 20C)
-3. Select check interval (30min, 1hr, 2hr, 4hr)
-4. Click **"Start Monitor"**
-5. Login to WebReg when browser opens (one time)
-6. Browser stays minimized - you'll get emails when seats open!
+Add the courses you want to monitor, pick how often you want it to check (I use 1 hour), and click Start Monitor. A Chrome window will open for you to login to WebReg. Do the Duo thing, select your quarter, click Go. After that just minimize the browser and forget about it.
 
-### Stop monitoring:
+You'll get an email whenever a seat opens up.
 
-Click **"Stop Monitor"** on the website or press `Ctrl+C` in the API terminal.
+To stop it, click Stop Monitor on the website.
 
-## 📊 How It Works
+## How it works
 
-1. **Session Management:** Uses Selenium to maintain persistent WebReg sessions with cookie-based authentication
-2. **DOM Parsing:** Extracts seat data using jqGrid aria-describedby attributes
-3. **Background Worker:** Runs continuous monitoring with configurable intervals
-4. **Notification System:** Sends email alerts with seat details and enrollment links
+Uses Selenium to automate Chrome. Logs into WebReg, saves your cookies so you stay logged in, then checks your courses on a loop. When it finds available seats it sends you an email and plays a sound.
 
-## 🗂️ Project Structure
+The web interface talks to a Flask API that manages everything. Course data gets stored in SQLite.
+
+## File structure
 ```
-course-sniper/
-├── backend/
-│   ├── webreg_bot.py       # Core Selenium automation
-│   ├── hybrid_monitor.py   # Background monitoring service
-│   ├── api.py              # Flask REST API
-│   └── requirements_web.txt
-└── frontend/
-    └── index.html          # Web dashboard
+backend/
+  webreg_bot.py         - main bot code
+  hybrid_monitor.py     - monitoring loop
+  api.py                - Flask API
+  
+frontend/
+  index.html            - web interface
 ```
 
-## ⚙️ Configuration
+## Settings
 
-- **Check interval:** Adjustable from 30 minutes to 4 hours
-- **Email cooldown:** 1 hour between notifications per course
-- **Sound alerts:** Once per hour per course (macOS only)
+Check interval: 30 minutes to 4 hours
+Email cooldown: won't spam you, only sends once per hour per course
+Sound alerts: plays once per hour (macOS only)
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
-**"Cookies expired" error:**
-- Browser will open for manual login
-- Complete Duo authentication
-- Select quarter and click Go
-- Press Enter in terminal
+If cookies expire the browser will pop up again for you to login. Just login again and you're good.
 
-**API not connecting:**
-- Ensure API is running on port 5001
-- Check firewall settings
-- Use http://localhost:5001 (not 5000)
+Make sure the API is running on port 5001 (not 5000, AirPlay uses that).
 
-**Browser keeps popping up:**
-- This is normal - minimize it and it will stay minimized
-- Browser must stay open for session persistence
+The browser needs to stay open. Just minimize it.
 
-## 📝 Notes
+## Notes
 
-- **Session duration:** WebReg cookies typically last 24 hours
-- **Rate limiting:** Built-in 3-second delay between course checks
-- **Multi-user:** Each user runs their own instance locally
-- **Uptime:** Requires computer to stay on (use `caffeinate` on macOS)
+Your computer needs to stay on for this to work. On Mac you can use `caffeinate` to keep it awake.
 
-## 🤝 Contributing
+WebReg sessions last about 24 hours before you need to login again.
 
-Pull requests welcome! Please ensure:
-- Code follows existing style
-- Add comments for complex logic
-- Test with actual WebReg before submitting
+There's a 3 second delay between checking different courses so you don't spam WebReg.
 
-## ⚠️ Disclaimer
+Each person runs their own copy locally.
 
-This tool is for educational purposes. Use responsibly and in accordance with UCSD policies. The author is not responsible for any misuse or violations of university policies.
+## Contributing
 
-## 📄 License
+PRs welcome. Just make sure your code works with actual WebReg before submitting.
 
-MIT License - See LICENSE file for details
+## Disclaimer
 
----
+Educational purposes only. Don't abuse this or violate UCSD policies. I'm not responsible if you do something dumb with it.
 
-Built with ❤️ for UCSD students tired of refreshing WebReg
+## License
+
+MIT
