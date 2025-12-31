@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Personal data - NEVER COMMIT THESE
+cookies.json
+webreg.db
+email_config.json
+
+# Runtime files
+monitor.log
+monitor_status.json
+monitor_config.json
+monitor_stop.signal
+*.signal
+
+# Debug files
+debug_*.py
+debug_*.html
+debug_*.png
+screenshot*.png
+results*.png
+*.png
+error_page.html
+no_results.html
+results_page.html
+search_page.html
+timeout_page.html
+explorer_page.html
+
+# Old/unused versions
+simple_monitor.py
+monitor_service.py
+monitor_daemon.py
+monitor_web.py
+webreg_worker.py
+check_single_course.py
+silent_bot.py
+webreg_api.py
+webreg_bot_verbose.py
+analyze_html.py
+courses_to_monitor.json
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
